@@ -3,9 +3,9 @@
 *.classpath
 *.project
 *.settings*
-/target/
-/output/
-/input/
+*/target/*
+*/output/*
+*/input/*
 
 # Log file
 *.log
