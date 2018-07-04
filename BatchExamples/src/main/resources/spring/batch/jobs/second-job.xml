@@ -1,0 +1,50 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:batch="http://www.springframework.org/schema/batch" 
+	xmlns:util="http://www.springframework.org/schema/util" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/batch
+		http://www.springframework.org/schema/batch/spring-batch-2.2.xsd
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/util 
+		http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+
+	<batch:job id="second-job">
+		<batch:step id="first-step">
+			<batch:tasklet>
+				<batch:chunk reader="mongoDBItemReader" 
+					   writer="cvsFileItemWriter" 
+					   commit-interval="10" />
+			</batch:tasklet>
+		</batch:step>
+	</batch:job>
+	
+	<bean id="mongoDBItemReader" class="org.springframework.batch.item.data.MongoItemReader" scope="step">
+		<property name="name" value="mongoItemReader" />
+		<property name="template" ref="mongoTemplate" />
+		<property name="targetType" value="com.springframework.entities.Weather" />
+		<property name="query" value="{outlook : { $in : ['overcast','rainy','sunny']}}" />
+		<property name="sort">
+			<util:map id="sort">
+				<entry key="id" value="DESC" />
+			</util:map>
+		</property>
+	</bean>
+	
+	<bean id="cvsFileItemWriter" class="org.springframework.batch.item.file.FlatFileItemWriter">
+		<!-- write to this csv file -->
+		<property name="resource" value="file:output/report.csv" />
+		<property name="shouldDeleteIfExists" value="true" />
+		<property name="lineAggregator">
+	  		<bean class="org.springframework.batch.item.file.transform.DelimitedLineAggregator">
+				<property name="delimiter" value="," />
+				<property name="fieldExtractor">
+		  			<bean class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
+						<property name="names" value="outlook, temperature, humidity, windy, play" />
+		   			</bean>
+				</property>
+	   		</bean>
+		</property>
+  	</bean>
+	
+</beans>

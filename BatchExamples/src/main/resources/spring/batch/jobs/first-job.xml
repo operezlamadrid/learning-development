@@ -1,0 +1,48 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:batch="http://www.springframework.org/schema/batch" 
+	xmlns:util="http://www.springframework.org/schema/util" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/batch
+		http://www.springframework.org/schema/batch/spring-batch-2.2.xsd
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/util 
+		http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+
+	<batch:job id="first-job">
+		<batch:step id="first-step">
+			<batch:tasklet>
+				<batch:chunk reader="itemReader" 
+					   writer="mongoDBItemWriter" 
+					   commit-interval="10" />
+			</batch:tasklet>
+		</batch:step>
+	</batch:job>
+	<!-- Reader BEGIN -->
+	<bean id="itemReader" class="org.springframework.batch.item.file.FlatFileItemReader">
+		<property name="resource" value="file:input/weather.csv"/>
+		<property name="lineMapper" ref="defaultLineMapper"/>
+	</bean>
+	
+	<bean id="defaultLineMapper" class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+		<property name="lineTokenizer" ref="defaultLineTokenizer"/>
+		<property name="fieldSetMapper" ref="defaultFieldSetMapper"/>
+	</bean>
+	
+	<bean id="defaultLineTokenizer" class = "org.springframework.batch.item.file.transform.DelimitedLineTokenizer">
+		<property name="names" value="outlook,temperature,humidity,windy,play"/>
+	</bean>
+	
+    <bean id="defaultFieldSetMapper" class="org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper">
+    	<property name="prototypeBeanName" value="weather" />
+    </bean>
+    
+    <bean id ="weather" class="com.springframework.entities.Weather" scope="prototype"/>
+    <!-- Reader END -->	
+    
+    
+    <bean id="mongoDBItemWriter" class="org.springframework.batch.item.data.MongoItemWriter">
+    	<property name="template" ref="mongoTemplate" />
+		<property name="collection" value="weather" />
+    </bean>
+</beans>
