@@ -2,13 +2,18 @@
 	xmlns:batch="http://www.springframework.org/schema/batch" 
 	xmlns:util="http://www.springframework.org/schema/util" 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/batch
 		http://www.springframework.org/schema/batch/spring-batch-2.2.xsd
 		http://www.springframework.org/schema/beans 
 		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
 		http://www.springframework.org/schema/util 
-		http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+		http://www.springframework.org/schema/util/spring-util-3.2.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
+	<context:property-placeholder location="classpath:properties/configuration.properties"/>
+	
 	<batch:job id="first-job">
 		<batch:step id="first-step">
 			<batch:tasklet>
@@ -20,7 +25,7 @@
 	</batch:job>
 	<!-- Reader BEGIN -->
 	<bean id="itemReader" class="org.springframework.batch.item.file.FlatFileItemReader">
-		<property name="resource" value="file:input/weather.csv"/>
+		<property name="resource" value="file:input/${input.fileName}"/>
 		<property name="lineMapper" ref="defaultLineMapper"/>
 	</bean>
 	

@@ -4,9 +4,15 @@
 	http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   
-  <groupId>com.development.springframework</groupId>
+  <parent>
+		<groupId>com.development.springframework</groupId>
+		<artifactId>BatchParent</artifactId>
+		<version>1.0-SNAPSHOT</version>
+		<relativePath>../BatchParent/pom.xml</relativePath>
+	</parent>
+  
+  
   <artifactId>BatchExamples</artifactId>
-  <version>1.0-SNAPSHOT</version>
   <name>BatchExamples</name>
   
   <properties>
@@ -17,72 +23,6 @@
 		<mongodb.driver.version>2.11.2</mongodb.driver.version>
 	</properties>
 
-	<dependencies>
-
-		<!-- Spring Core -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-
-		<!-- Spring XML to/back object -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-oxm</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-
-		<!-- Spring Batch dependencies -->
-		<dependency>
-			<groupId>org.springframework.batch</groupId>
-			<artifactId>spring-batch-core</artifactId>
-			<version>${spring.batch.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.batch</groupId>
-			<artifactId>spring-batch-infrastructure</artifactId>
-			<version>${spring.batch.version}</version>
-		</dependency>
-
-		<!-- Spring Batch unit test -->
-		<dependency>
-			<groupId>org.springframework.batch</groupId>
-			<artifactId>spring-batch-test</artifactId>
-			<version>${spring.batch.version}</version>
-		</dependency>
-
-		<!-- MongoDB database driver -->
-		<dependency>
-			<groupId>org.mongodb</groupId>
-			<artifactId>mongo-java-driver</artifactId>
-			<version>${mongodb.driver.version}</version>
-		</dependency>
-
-		<!-- Spring data mongodb -->
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-mongodb</artifactId>
-			<version>${spring.data.version}</version>
-		</dependency>
-
-		<!-- Junit -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- Testng -->
-		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<version>6.8.5</version>
-			<scope>test</scope>
-		</dependency>
-
-	</dependencies>
 	<build>
 	    <finalName>spring-batch</finalName>
 	    <plugins>
@@ -106,4 +46,5 @@
 		</plugin>
 	    </plugins>
 	</build>
+	
 </project>
